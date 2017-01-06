@@ -114,6 +114,13 @@ func NewAuthServer(c *Config) (*AuthServer, error) {
 		}
 		as.authenticators = append(as.authenticators, ca)
 	}
+	if c.RestAPIAuth != nil {
+		ra, err := authn.NewRestAPIAuth(c.RestAPIAuth)
+		if err != nil {
+			return nil, err
+		}
+		as.authenticators = append(as.authenticators, ra)
+	}
 	return as, nil
 }
 

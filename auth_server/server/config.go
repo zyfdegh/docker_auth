@@ -45,6 +45,7 @@ type Config struct {
 	ACLMongo    *authz.ACLMongoConfig          `yaml:"acl_mongo,omitempty"`
 	ACLCouchDB  *authz.ACLCouchDBConfig        `yaml:"acl_couchdb,omitempty"`
 	ExtAuthz    *authz.ExtAuthzConfig          `yaml:"ext_authz,omitempty"`
+	RestAPIAuth *authn.RestAPIAuthConfig       `yaml:"restapi_auth,omitempty"`
 }
 
 type ServerConfig struct {
@@ -79,7 +80,8 @@ func validate(c *Config) error {
 	if c.Token.Expiration <= 0 {
 		return fmt.Errorf("expiration must be positive, got %d", c.Token.Expiration)
 	}
-	if c.Users == nil && c.ExtAuth == nil && c.GoogleAuth == nil && c.GitHubAuth == nil && c.LDAPAuth == nil && c.MongoAuth == nil && c.CouchDBAuth == nil {
+	if c.Users == nil && c.ExtAuth == nil && c.GoogleAuth == nil && c.GitHubAuth == nil &&
+		c.LDAPAuth == nil && c.MongoAuth == nil && c.CouchDBAuth == nil && c.RestAPIAuth == nil {
 		return errors.New("no auth methods are configured, this is probably a mistake. Use an empty user map if you really want to deny everyone.")
 	}
 	if c.MongoAuth != nil {
@@ -129,6 +131,11 @@ func validate(c *Config) error {
 	if c.ExtAuth != nil {
 		if err := c.ExtAuth.Validate(); err != nil {
 			return fmt.Errorf("bad ext_auth config: %s", err)
+		}
+	}
+	if c.RestAPIAuth != nil {
+		if err := c.RestAPIAuth.Validate("restapi_auth"); err != nil {
+			return fmt.Errorf("bad restapi_auth config: %s", err)
 		}
 	}
 	if c.ACL == nil && c.ACLMongo == nil && c.ACLCouchDB == nil && c.ExtAuthz == nil {
