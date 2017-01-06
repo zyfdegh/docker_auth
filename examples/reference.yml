@@ -154,6 +154,19 @@ couchdb_auth:
     # The password with which to connect to the CouchDB server.
     password: ""
 
+# REST API authentication - extended method for linkernetworks
+# Example request:
+#   curl -X POST http://127.0.0.1:8080/user/login -d email=someone@email.com -d password=secret
+# Example response(ok):
+# {
+# 	"code":200,
+# 	"msg":"ok",
+# 	"token":"233333333333"
+# }
+restapi_auth:
+    method: POST
+    endpoint: 127.0.0.1:8080
+
 # External authentication - call an external progam to authenticate user.
 # Username and password are passed to command's stdin and exit code is examined.
 # 0 - allow, 1 - deny, 2 - no match, other - error.
