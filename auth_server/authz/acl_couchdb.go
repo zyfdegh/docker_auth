@@ -161,14 +161,13 @@ func (ca *aclCouchDBAuthorizer) updateACLCache() error {
 	if res != nil {
 		for _, r := range res.Rows {
 			valueMap := r.Value.(map[string]interface{})
-			for k, v := range valueMap {
-				fmt.Printf("Key %s, Value %s\n", k, v)
-			}
 			// valueMap looks like this
-			// Key "_id", Value "d61501d99587ad7d86e69a5520005844"
-			// Key "_rev", Value "1-4e9b44eafd0fbc6bd4a04c0f73868627"
-			// Key "acl_entry", Value "map[Match:map[account:test name:test-*] Actions:[*]
-			//		Comment:User "test" has full access to test-* images but nothing else. (1)]"
+			// Key Match, Value map[account:admin]
+			// Key Actions, Value [*]
+			// Key Comment, Value Admin has full access to everything.
+			// Key _id, Value 52df6a4c186dc6677e2dba92860000c0
+			// Key _rev, Value 1-6722270fc0288e04673d17366318cbba
+			// Key Seq, Value 10
 
 			// I have to marshal/unmarshal because it cannot convert to struct CouchDBACLEntry
 			// TODO any better idea?
