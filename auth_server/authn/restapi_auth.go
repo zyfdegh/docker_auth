@@ -7,10 +7,15 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
 	"github.com/golang/glog"
+)
+
+const (
+	keyAuthAPIEndpoint = "AUTH_API_ENDPOINT"
 )
 
 // RestAPIAuthConfig is inspired by MongoAuthConfig
@@ -39,7 +44,10 @@ type RestAPIRespBody struct {
 
 // NewRestAPIAuth creates a new RestAPIAuth
 func NewRestAPIAuth(c *RestAPIAuthConfig) (*RestAPIAuth, error) {
-	// Attempt to create new http client.
+	// Attempt to create config.
+	if e := os.Getenv(keyAuthAPIEndpoint); e != "" {
+		c.Endpoint = e
+	}
 
 	return &RestAPIAuth{
 		config: c,
