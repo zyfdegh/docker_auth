@@ -29,12 +29,6 @@ type RestAPIAuth struct {
 	config *RestAPIAuthConfig
 }
 
-// RestAPIUser is inspired by authUserEntry
-type RestAPIUser struct {
-	Email    *string `yaml:"email,omitempty" json:"email,omitempty"`
-	Password *string `yaml:"password,omitempty" json:"password,omitempty"`
-}
-
 // RestAPIRespBody is the body of RestAPI response
 type RestAPIRespBody struct {
 	Code  int    `json:"code"`
@@ -74,7 +68,7 @@ func (rauth *RestAPIAuth) authenticate(account string, password PasswordString) 
 	glog.V(2).Infof("Checking user %s from remote restful server %s",
 		account, rauth.config.Endpoint)
 
-	u := fmt.Sprintf("http://%s/user/login?email=%s&password=%s",
+	u := fmt.Sprintf("http://%s/user/login?username=%s&password=%s",
 		rauth.config.Endpoint, account, string(password))
 
 	req, err := http.NewRequest(rauth.config.Method, u, nil)
@@ -100,7 +94,7 @@ func (rauth *RestAPIAuth) authenticate(account string, password PasswordString) 
 	}
 
 	// judge
-	if apiResp.Code == 200 && apiResp.Msg == "ok" {
+	if apiResp.Code == 200 && apiResp.Msg == "ok" && len(apiResp.Token) > 0 {
 		return true, nil
 	}
 

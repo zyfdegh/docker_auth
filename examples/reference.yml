@@ -165,7 +165,7 @@ couchdb_auth:
 # REST API authentication - extended method for linkernetworks
 # If environment variable ${AUTH_API_ENDPOINT} is set, will use that env in prior.
 # Example request:
-#   curl -X POST http://127.0.0.1:8080/user/login -d email=someone@email.com -d password=secret
+#   curl -X POST http://127.0.0.1:8080/user/login -d username=someone -d password=secret
 # Example response(ok):
 # {
 # 	"code":200,
