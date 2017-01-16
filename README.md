@@ -1,3 +1,43 @@
+# Fork
+Original repo [cesanta/docker_auth](https://github.com/cesanta/docker_auth)
+
+# Build
+
+## Prerequisites
+
+make
+Go 1.5+(recommended)
+Docker 1.10+(recommended)
+
+## Clone
+
+**IMPORTANT** Clone into `$GOPATH/src/github.com/cesanta/docker_auth/`, otherwise build error will occure due to import path.
+```sh
+git clone git@bitbucket.org:linkernetworks/docker_auth.git $GOPATH/src/github.com/cesanta/docker_auth/
+```
+
+## Build
+```sh
+cd $GOPATH/src/github.com/cesanta/docker_auth/auth_server
+pip install gitpython
+make
+docker tag cesanta/docker_auth linkeriot/docker_auth
+```
+
+## Config
+Generate self-signed certs
+```sh
+openssl req -newkey rsa:2048 -nodes -sha256 -keyout ssl/server.key -x509 -days 365 -out ssl/server.pem
+```
+
+Sample config file `examples/auth_config.yml`
+
+
+## Run
+```sh
+docker run -p 5001:5001 -v $PWD/config:/config -v $PWD/logs:/logs -v $PWD/ssl:/ssl linkeriot/docker_auth --v=2 --alsologtostderr /config/auth_config.yml
+```
+
 Docker Registry 2 authentication server
 =========================================
 
